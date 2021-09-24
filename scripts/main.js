@@ -1,7 +1,11 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
+let dx = 1.5;
+let dy = -1.5;
 
+let x = canvas.width/2;
+let y = canvas.height - 30;
 
 let rightPressed = false; 
 let leftPressed = false;
@@ -68,11 +72,17 @@ function drawRect() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawDots1(0);
-    drawDots1(400);
     drawRect();
-    drawDots2(0);
-    drawDots2(560);
+    if(level == 1) {
+        drawDots1(0);
+        drawDots1(400);
+        drawDots2(0);
+        drawDots2(560);
+    }
+
+    var img = document.getElementById("monster");
+    ctx.drawImage(img, 10, 10);
+   
 
 }
 

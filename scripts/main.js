@@ -1,11 +1,14 @@
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
-let dx = 1.5;
-let dy = -1.5;
+let dx = 1;
+let dy = -1;
 
-let x = canvas.width/2;
-let y = canvas.height - 30;
+let x = 440;
+let y = 110;
+
+let a = 500; 
+let b = 400; 
 
 let rightPressed = false; 
 let leftPressed = false;
@@ -14,7 +17,7 @@ let downPressed = false;
 
 let dotRadius = 5; 
 let dotOffsetLeft = 465; 
-let dotOffsetTop = 125;
+let dotOffsetTop = 55;
 let dotWidthCount = 29; 
 let dotHeightCount = 20;
 let dotPadding = 15;
@@ -26,6 +29,10 @@ let lives = 3;
 let level = 1;
 
 let dots = [];
+
+var monster = document.getElementById("monster");
+var night = document.getElementById("night");
+var steve = document.getElementById("steve");
 
 for (let r=0; r < dotWidthCount; r++) {
     dots[r] = { x:0, y:0, show: true};
@@ -66,26 +73,105 @@ function drawDots2(left) {
 function drawRect() {
     ctx.beginPath();
     ctx.lineWidth = 2;
-    ctx.rect(440, 100, 610, 450);
+    ctx.rect(440, 30, 610, 425);
     ctx.stroke();
 }
 
+function drawLevel() {
+    ctx.font = "20px VT323"; 
+    ctx.fillStyle = "white"; 
+    ctx.fillText("Level:" + level, 1050-80, 30 + 20);
+}
+
+function keyDownHandler(e) {
+    if(e.key == "Right" || e.key == "ArrowRight") {
+        rightPressed = true;
+    }
+    else if(e.key =="Left" || e.key == "ArrowLeft") {
+        leftPressed = true;
+    }
+    else if(e.key =="Up" || e.key == "ArrowUp"){
+        upPressed = true;
+    }
+    else if(e.key =="Down" || e.key == "ArrowDown"){
+        downPressed = true;
+    }
+}
+
+function keyUpHandler(e) {
+    if(e.key == "Right" || e.key == "ArrowRight") {
+        rightPressed = false;
+    }
+    else if(e.key =="Left" || e.key == "ArrowLeft") {
+        leftPressed = false;
+    }
+    else if(e.key =="Up" || e.key == "ArrowUp"){
+        upPressed = false;
+    }
+    else if(e.key =="Down" || e.key == "ArrowDown"){
+        downPressed = false;
+    }
+}
+
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(night, 440, 30, 610, 425);
     drawRect();
+   
+
+    x+=dx;
+    y+=dy;
+
     if(level == 1) {
         drawDots1(0);
-        drawDots1(400);
+        drawDots1(380);
         drawDots2(0);
         drawDots2(560);
     }
+    
 
-    var img = document.getElementById("monster");
-    ctx.drawImage(img, 10, 10);
+    if (x + dx + 60> 1050 || x + dx < 440) {
+        dx = -dx;
+    }
    
+    if(y + dy < 30 || y + dy + 90 > 455) {
+        dy = -dy;
+    } 
+
+    if(rightPressed) {
+        a +=3; 
+        if (a > 1050 - 40) {
+            a = 1050 - 40; 
+        }
+    }
+    else if(leftPressed) {
+        a -=3;
+        if (a < 440) {
+            a = 440;
+        }
+    }
+    else if(downPressed) {
+        b +=3;
+        if (b > 455 - 90) {
+            b = 455 - 90;
+        }
+    }
+    else if(upPressed) {
+        b -=3;
+        if (b < 30) {
+            b = 30;
+        }
+    }
+
+    drawLevel();
+    ctx.drawImage(steve, a, b, 40, 90);
+    ctx.drawImage(monster, x, y, 60, 90);
 
 }
 
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
 
 let interval = setInterval(draw,10);
 

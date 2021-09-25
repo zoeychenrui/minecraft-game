@@ -8,7 +8,7 @@ let x = 440;
 let y = 110;
 
 let a = 500; 
-let b = 400; 
+let b = 365; 
 
 let rightPressed = false; 
 let leftPressed = false;
@@ -82,6 +82,58 @@ function drawLevel() {
     ctx.fillStyle = "white"; 
     ctx.fillText("Level:" + level, 1050-80, 30 + 20);
 }
+
+/* function dotDetection() {
+    for (let c=0; c< brickColumnCount; c++) {
+        for(let r=0; r < brickRowCount; r++) {
+            let b = bricks[c][r];
+            if (b.show ==true) {
+                if (x> b.x && x < b.x + brickWidth && y > b.y && y <b.y + brickHeight) {
+                    dy = -dy;
+                    b.show = false;
+                    score++;
+                    if (score == brickRowCount * brickColumnCount) {
+                        if (levelCount % 3 ==1) {
+                            alert("Onto Level 2!");
+                            resetBricks();
+                            x = canvas.width/2;
+                            y = canvas.height-30;
+                            paddleWidth -=30;
+                            levelCount +=1;
+                            dx = 2;
+                            dy = -2;
+                            
+                        }
+                        if (levelCount % 3==2 ) {
+                            alert("Onto Level 3!");
+                            resetBricks();
+                            x = canvas.width/2;
+                            y = canvas.height-30;
+                            paddleWidth -=30;
+                            levelCount +=1;
+                            dx = 2.5;
+                            dy = -2.5;
+                        }
+                        if (levelCount % 3==0) {
+                            alert("Back to Level 1!");
+                            resetBricks();
+                            x = canvas.width/2;
+                            y = canvas.height-30;
+                            paddleWidth = 90;
+                            levelCount +=1;
+                            dx = 1.5;
+                            dy = -1.5;
+                        }
+                        
+                        
+                    }
+                }
+            }
+            
+        }
+    }
+}
+*/ 
 
 function keyDownHandler(e) {
     if(e.key == "Right" || e.key == "ArrowRight") {

@@ -27,6 +27,7 @@ let wallHeight = 70;
 
 let lives = 3;
 let level = 1;
+let score = 0;
 
 let dots = [];
 
@@ -38,7 +39,12 @@ for (let r=0; r < dotWidthCount; r++) {
     dots[r] = { x:0, y:0, show: true};
 }
 
-function drawDots1(top) {
+/*
+for (let h=0; h < dotHeightCount; h++) {
+    dots[h] = { x:0, y:0, show: true};
+}
+*/
+function drawDotsWidth(top) {
     for (let r=0; r < dotWidthCount; r++) {
         if (dots[r].show == true) {
             let dotX = (r*(dotRadius+dotPadding)) + dotOffsetLeft; 
@@ -54,7 +60,7 @@ function drawDots1(top) {
     }
 }
 
-function drawDots2(left) {
+function drawDotsHeight(left) {
     for (let r=0; r < dotHeightCount; r++) {
         if (dots[r].show == true) {
             let dotX = dotOffsetLeft + left; 
@@ -83,17 +89,22 @@ function drawLevel() {
     ctx.fillText("Level:" + level, 1050-80, 30 + 20);
 }
 
-/* function dotDetection() {
-    for (let c=0; c< brickColumnCount; c++) {
-        for(let r=0; r < brickRowCount; r++) {
-            let b = bricks[c][r];
-            if (b.show ==true) {
-                if (x> b.x && x < b.x + brickWidth && y > b.y && y <b.y + brickHeight) {
-                    dy = -dy;
-                    b.show = false;
+function drawLives() {
+    ctx.font = "20px VT323"; 
+    ctx.fillStyle = "white"; 
+    ctx.fillText("Lives:" + lives, 440+20, 30 + 20);
+}
+
+/*
+function dotDetection() {
+    for (let r=0; r< dotWidthCount; r++) {
+            let d = dots[r];
+            if (d.show ==true) {
+                if (a> d.x && a < d.x + dotRadius && b > d.y && b <d.y + dotRadius) {
+                    d.show = false;
                     score++;
-                    if (score == brickRowCount * brickColumnCount) {
-                        if (levelCount % 3 ==1) {
+                    /*if (score == 2*dotHeightCount + 2* dotWidthCount) {
+                        if (level % 3 ==1) {
                             alert("Onto Level 2!");
                             resetBricks();
                             x = canvas.width/2;
@@ -126,15 +137,13 @@ function drawLevel() {
                         }
                         
                         
-                    }
+                    } 
                 }
             }
             
         }
-    }
-}
-*/ 
-
+    } */
+    
 function keyDownHandler(e) {
     if(e.key == "Right" || e.key == "ArrowRight") {
         rightPressed = true;
@@ -176,10 +185,10 @@ function draw() {
     y+=dy;
 
     if(level == 1) {
-        drawDots1(0);
-        drawDots1(380);
-        drawDots2(0);
-        drawDots2(560);
+        drawDotsWidth(0);
+        drawDotsWidth(380);
+        drawDotsHeight(0);
+        drawDotsHeight(560);
     }
     
 
@@ -216,10 +225,26 @@ function draw() {
         }
     }
 
-    drawLevel();
     ctx.drawImage(steve, a, b, 40, 90);
     ctx.drawImage(monster, x, y, 60, 90);
-
+    /*if(a == x || b == y) {
+        if(lives == 1) {
+            alert("Game Over!");
+            document.location.reload();
+            clearInterval(interval);
+        }
+        else {
+            lives -=1;
+            a = 745; 
+            b = 242; 
+        }
+     }
+*/
+    drawLives(); 
+    drawLevel();
+    
+    
+    //dotDetection();
 }
 
 document.addEventListener("keydown", keyDownHandler, false);

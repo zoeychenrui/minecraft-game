@@ -27,13 +27,6 @@ let leftPressed = false;
 let upPressed = false; 
 let downPressed = false;
 
-let dotRadius = 5; 
-let dotOffsetLeft = 465; 
-let dotOffsetTop = 55;
-let dotWidthCount = 29; 
-let dotHeightCount = 20;
-let dotPadding = 15;
-
 let wallWidth = 15; 
 let wallHeight = 70; 
 
@@ -42,6 +35,12 @@ let level = 3;
 let score = 0;
 
 let dots = [];
+
+let carrotcol = false; 
+let beaconcol = false;
+let eggcol = false;
+let pigcol = false;
+let endercol = false;
 
 var monster = document.getElementById("monster");
 var night = document.getElementById("night");
@@ -56,53 +55,76 @@ var ender = document.getElementById("ender");
 var creeper = document.getElementById("creeper");
 var skeleton = document.getElementById("skeleton");
 
-for (let r=0; r < dotWidthCount; r++) {
-    dots[r] = { x:0, y:0, show: true};
-}
-
-/*
-for (let h=0; h < dotHeightCount; h++) {
-    dots[h] = { x:0, y:0, show: true};
-}
-
-function drawDotsWidth(top) {
-    for (let r=0; r < dotWidthCount; r++) {
-        if (dots[r].show == true) {
-            let dotX = (r*(dotRadius+dotPadding)) + dotOffsetLeft; 
-            let dotY = dotOffsetTop + top;
-            dots[r].x = dotX;
-            dots[r].y = dotY;
-            ctx.beginPath();
-            ctx.arc(dotX, dotY, dotRadius, 0, Math.PI*2);
-            ctx.fillStyle = "hsl("+Date.now()*0.07%360+",80%,50%)";
-            ctx.fill();
-            ctx.closePath();
-        }
-    }
-}
-
-function drawDotsHeight(left) {
-    for (let r=0; r < dotHeightCount; r++) {
-        if (dots[r].show == true) {
-            let dotX = dotOffsetLeft + left; 
-            let dotY = (r*(dotRadius+dotPadding)) + dotOffsetTop; 
-            dots[r].x = dotX;
-            dots[r].y = dotY;
-            ctx.beginPath();
-            ctx.arc(dotX, dotY, dotRadius, 0, Math.PI*2);
-            ctx.fillStyle = "hsl("+Date.now()*0.07%360+",80%,50%)";
-            ctx.fill();
-            ctx.closePath();
-        }
-    }
-}
-*/
 
 function collisionDetection() {
-    if(a== x || a == x + 60 || b == y || b == y + 90) {
-        lives-=1;
+    if(level==1) {
+        if((a > x-60 && a<x+60 && b > y - 90 && b<y+90)) {
+            if(lives==1) {
+                alert("Game Over!");
+                document.location.reload();
+                clearInterval(interval);
+            }
+            else {
+                lives-=1;
+                setPos();
+            }
+            
+        }
     }
+    else if(level==2) {
+        if((a > x-60 && a<x+60 && b > y - 90 && b<y+90) || (a > sx-60 && a<sx+60 && b > sy - 90 && b<sy+90)) {
+            if(lives==1) {
+                alert("Game Over!");
+                document.location.reload();
+                clearInterval(interval);
+            }
+            else {
+                lives-=1;
+                setPos();
+            }
+            
+        }
+    }
+    else if(level==3) {
+        if((a > x-60 && a<x+60 && b > y - 90 && b<y+90) || (a > sx-60 && a<sx+60 && b > sy - 90 && b<sy+90) || (a > cx-60 && a<cx+50 && b > cy - 90 && b<cy+90) ) {
+            if(lives==1) {
+                alert("Game Over!");
+                document.location.reload();
+                clearInterval(interval);
+            }
+            else {
+                lives-=1;
+                setPos();
+            }
+            
+        }
+    }
+    
 }
+
+function setPos() {
+    dx = 1;
+    dy = -1;
+    
+    dsx = 1;
+    dsy = -1;
+    
+    dcx = 1;
+    dcy = -1;
+    
+    x = 440;
+    y = 110;
+    
+    sx = 950;
+    sy = 110;
+    
+    cx = 800; 
+    cy = 340; 
+    
+    a = 500; 
+    b = 365;
+}
+
 function drawRect() {
     ctx.beginPath();
     ctx.lineWidth = 2;
@@ -155,28 +177,54 @@ function keyUpHandler(e) {
 }
 
 function drawItems() {
-    ctx.drawImage(carrot, 480, 120, 30, 30);
+    //ctx.drawImage(carrot, 480, 120, 30, 30);
     ctx.drawImage(beacon, 850, 325, 50, 50);
     ctx.drawImage(egg, 950, 100, 30, 30);
     ctx.drawImage(pig, 700, 200, 50, 50);
     ctx.drawImage(ender, 1000, 400, 30, 30);
 }
 
+/*function checkLevel() {
+    if (score<5) {
+        level = 1;
+    }
+    else if (score < 10) {
+        level = 2;
+    }
+    else {
+        level = 3;
+    }
+} */
+
+function carrotCollide() {
+    if(a > 480-60 && a< 480+60 && b > 120 - 90 && b< 120+90) {
+        carrotcol = true;
+        score+=1;
+    }
+    if(!carrotcol) {
+        ctx.drawImage(carrot, 480, 120, 30, 30);
+    }
+}
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    
+    //checkLevel();
+
     if(level==1) {
         ctx.drawImage(night, 440, 30, 610, 425);
+        carrotCollide();
         drawItems();
     }
     else if(level==2) {
         ctx.drawImage(night2, 440, 30, 610, 425);
+        carrotCollide();
         drawItems();
         ctx.drawImage(skeleton, sx, sy, 60, 90);
     }
     else if(level==3) {
         ctx.drawImage(night3, 440, 30, 610, 425);
+        carrotCollide();
         drawItems();
         ctx.drawImage(skeleton, sx, sy, 60, 90);
         ctx.drawImage(creeper, cx, cy, 50, 90);
@@ -184,7 +232,7 @@ function draw() {
     
     ctx.drawImage(steve, a, b, 40, 90);
     ctx.drawImage(monster, x, y, 60, 90);
-    // ctx.drawImage(steve)
+  
     drawRect();
    
     x+=dx;
@@ -195,13 +243,6 @@ function draw() {
 
     cx+=dcx;
     cy+=dcy;
-
-   /* if(level == 1) {
-        drawDotsWidth(0);
-        drawDotsWidth(380);
-        drawDotsHeight(0);
-        drawDotsHeight(560);
-    } */
     
 
     if (x + dx + 60> 1050 || x + dx < 440) {
@@ -253,26 +294,15 @@ function draw() {
         }
     }
 
-    
-    /*if(a == x || b == y) {
-        if(lives == 1) {
-            alert("Game Over!");
-            document.location.reload();
-            clearInterval(interval);
-        }
-        else {
-            lives -=1;
-            a = 745; 
-            b = 242; 
-        }
-     }
-*/
     drawLives(); 
     drawLevel();
     
     collisionDetection();
-    //dotDetection();
+    
 }
+
+document.getElementById("pics").style.visibility = "hidden";
+
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);

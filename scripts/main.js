@@ -22,6 +22,21 @@ let cy = 340;
 let a = 500; 
 let b = 365; 
 
+let carx = 480;
+let cary = 120;
+
+let beax = 850;
+let beay = 325;
+
+let eggx = 950;
+let eggy = 100;
+
+let pigx = 700;
+let pigy = 200;
+
+let endx = 1000;
+let endy = 400;
+
 let rightPressed = false; 
 let leftPressed = false;
 let upPressed = false; 
@@ -144,8 +159,6 @@ function drawLives() {
     ctx.fillText("Lives:" + lives, 440+20, 30 + 20);
 }
 
-
-    
 function keyDownHandler(e) {
     if(e.key == "Right" || e.key == "ArrowRight") {
         rightPressed = true;
@@ -178,54 +191,146 @@ function keyUpHandler(e) {
 
 function drawItems() {
     //ctx.drawImage(carrot, 480, 120, 30, 30);
-    ctx.drawImage(beacon, 850, 325, 50, 50);
-    ctx.drawImage(egg, 950, 100, 30, 30);
-    ctx.drawImage(pig, 700, 200, 50, 50);
-    ctx.drawImage(ender, 1000, 400, 30, 30);
+    // ctx.drawImage(beacon, 850, 325, 50, 50);
+    //ctx.drawImage(egg, 950, 100, 30, 30);
+    //ctx.drawImage(pig, 700, 200, 50, 50);
+    //ctx.drawImage(ender, 1000, 400, 30, 30);
 }
 
-/*function checkLevel() {
+function setItemsPos() {
+    carrotcol = false; 
+    beaconcol = false;
+    eggcol = false;
+    pigcol = false;
+    endercol = false;
+    carx = 480;
+    cary = 120;
+
+    beax = 850;
+    beay = 325;
+
+    eggx = 950;
+    eggy = 100;
+
+    pigx = 700;
+    pigy = 200;
+
+    endx = 1000;
+    endy = 400;
+}
+
+function checkLevel() {
     if (score<5) {
         level = 1;
+    }
+    else if(score==5) {
+        setItemsPos();
+        level = 2;
     }
     else if (score < 10) {
         level = 2;
     }
-    else {
+    else if(score ==10) {
+        setItemsPos();
+        level = 2;
+    }
+    else if(score <15) {
         level = 3;
     }
-} */
+    else if(score==15) {
+        alert("You survived the night!");
+        document.location.reload();
+        clearInterval(interval);
+    }
+
+} 
 
 function carrotCollide() {
-    if(a > 480-60 && a< 480+60 && b > 120 - 90 && b< 120+90) {
+    if(a > carx-60 && a< carx+60 && b > cary - 90 && b< cary+90) {
         carrotcol = true;
+        carx = 0;
+        cary = 0;
         score+=1;
     }
     if(!carrotcol) {
-        ctx.drawImage(carrot, 480, 120, 30, 30);
+        ctx.drawImage(carrot, carx, cary, 30, 30);
     }
+}
+
+function beaconCollide() {
+    if(a > beax-60 && a< beax+60 && b > beay - 90 && b< beay+90) {
+        beaconcol = true;
+        beax = 0;
+        beay = 0;
+        score+=1;
+    }
+    if(!beaconcol) {
+        ctx.drawImage(beacon, beax, beay, 50, 50);
+    }
+}
+
+function eggCollide() {
+    if(a > eggx-60 && a< eggx+60 && b > eggy - 90 && b< eggy+90) {
+        eggcol = true;
+        eggx = 0;
+        eggy = 0;
+        score+=1;
+    }
+    if(!eggcol) {
+        ctx.drawImage(egg, eggx, eggy, 30, 30);
+    }
+}
+
+function pigCollide() {
+    if(a > pigx-60 && a< pigx+60 && b > pigy - 90 && b< pigy+90) {
+        pigcol = true;
+        pigx = 0;
+        pigy = 0;
+        score+=1;
+    }
+    if(!pigcol) {
+        ctx.drawImage(pig, pigx, pigy, 50, 50);
+    }
+}
+
+function enderCollide() {
+    if(a > endx-60 && a< endx+60 && b > endy - 90 && b< endy+90) {
+        endercol = true;
+        endx = 0;
+        endy = 0;
+        score+=1;
+    }
+    if(!endercol) {
+        ctx.drawImage(ender, endx, endy, 30, 30);
+    }
+}
+
+function allCollides() {
+    carrotCollide(); 
+    beaconCollide();
+    eggCollide();
+    pigCollide();
+    enderCollide();
 }
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    //checkLevel();
+    checkLevel();
 
     if(level==1) {
         ctx.drawImage(night, 440, 30, 610, 425);
-        carrotCollide();
-        drawItems();
+        allCollides();
     }
+
     else if(level==2) {
         ctx.drawImage(night2, 440, 30, 610, 425);
-        carrotCollide();
-        drawItems();
+        allCollides();
         ctx.drawImage(skeleton, sx, sy, 60, 90);
     }
     else if(level==3) {
         ctx.drawImage(night3, 440, 30, 610, 425);
-        carrotCollide();
-        drawItems();
+        allCollides();
         ctx.drawImage(skeleton, sx, sy, 60, 90);
         ctx.drawImage(creeper, cx, cy, 50, 90);
     }

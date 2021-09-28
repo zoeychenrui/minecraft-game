@@ -1,6 +1,8 @@
+//draw canvas 
 let canvas = document.getElementById("myCanvas");
 let ctx = canvas.getContext("2d");
 
+//sets x and y pos of steve, monsters, and items 
 let dx = 1;
 let dy = -1;
 
@@ -37,6 +39,7 @@ let pigy = 200;
 let endx = 1000;
 let endy = 400;
 
+// sets controls to false 
 let rightPressed = false; 
 let leftPressed = false;
 let upPressed = false; 
@@ -45,18 +48,19 @@ let downPressed = false;
 let wallWidth = 15; 
 let wallHeight = 70; 
 
+// sets starting values of lives, level, score 
 let lives = 3;
 let level = 3;
 let score = 0;
 
-let dots = [];
-
+// sets the collection of items to false 
 let carrotcol = false; 
 let beaconcol = false;
 let eggcol = false;
 let pigcol = false;
 let endercol = false;
 
+// creates variables for Steve, monsters, and items 
 var monster = document.getElementById("monster");
 var night = document.getElementById("night");
 var night2 = document.getElementById("night2");
@@ -70,7 +74,7 @@ var ender = document.getElementById("ender");
 var creeper = document.getElementById("creeper");
 var skeleton = document.getElementById("skeleton");
 
-
+// detects collision between monster(s) and Steve, and ends game when Steve loses all lives 
 function collisionDetection() {
     if(level==1) {
         if((a > x-60 && a<x+60 && b > y - 90 && b<y+90)) {
@@ -117,6 +121,7 @@ function collisionDetection() {
     
 }
 
+// sets the pos of Steve and monsters back to starting point
 function setPos() {
     dx = 1;
     dy = -1;
@@ -140,6 +145,7 @@ function setPos() {
     b = 365;
 }
 
+// draws a rectangular border around the game screen
 function drawRect() {
     ctx.beginPath();
     ctx.lineWidth = 2;
@@ -147,18 +153,21 @@ function drawRect() {
     ctx.stroke();
 }
 
+// displays level 
 function drawLevel() {
     ctx.font = "20px VT323"; 
     ctx.fillStyle = "white"; 
     ctx.fillText("Level:" + level, 1050-80, 30 + 20);
 }
 
+// displays live count  
 function drawLives() {
     ctx.font = "20px VT323"; 
     ctx.fillStyle = "white"; 
     ctx.fillText("Lives:" + lives, 440+20, 30 + 20);
 }
 
+// controls user buttons 
 function keyDownHandler(e) {
     if(e.key == "Right" || e.key == "ArrowRight") {
         rightPressed = true;
@@ -189,14 +198,7 @@ function keyUpHandler(e) {
     }
 }
 
-function drawItems() {
-    //ctx.drawImage(carrot, 480, 120, 30, 30);
-    // ctx.drawImage(beacon, 850, 325, 50, 50);
-    //ctx.drawImage(egg, 950, 100, 30, 30);
-    //ctx.drawImage(pig, 700, 200, 50, 50);
-    //ctx.drawImage(ender, 1000, 400, 30, 30);
-}
-
+// sets pos of items to starting pos 
 function setItemsPos() {
     carrotcol = false; 
     beaconcol = false;
@@ -219,6 +221,7 @@ function setItemsPos() {
     endy = 400;
 }
 
+// checks what the level is and displays game background accordingly, sets items back to starting pos when threshold score is reached for each level 
 function checkLevel() {
     if (score<5) {
         level = 1;
@@ -245,6 +248,7 @@ function checkLevel() {
 
 } 
 
+//detects if steve collected carrot (if not, draw the carrot) and removes the carrot from view 
 function carrotCollide() {
     if(a > carx-60 && a< carx+60 && b > cary - 90 && b< cary+90) {
         carrotcol = true;
@@ -257,6 +261,7 @@ function carrotCollide() {
     }
 }
 
+//detects if steve collected beacon (if not, draw the beacon) and removes the beacon from view 
 function beaconCollide() {
     if(a > beax-60 && a< beax+60 && b > beay - 90 && b< beay+90) {
         beaconcol = true;
@@ -269,6 +274,7 @@ function beaconCollide() {
     }
 }
 
+//detects if steve collected egg (if not, draw the egg) and removes the egg from view 
 function eggCollide() {
     if(a > eggx-60 && a< eggx+60 && b > eggy - 90 && b< eggy+90) {
         eggcol = true;
@@ -281,6 +287,7 @@ function eggCollide() {
     }
 }
 
+//detects if pig collected pig (if not, draw the pig)and removes the pig from view 
 function pigCollide() {
     if(a > pigx-60 && a< pigx+60 && b > pigy - 90 && b< pigy+90) {
         pigcol = true;
@@ -293,6 +300,7 @@ function pigCollide() {
     }
 }
 
+//detects if steve collected ender peal (if not, draw the ender pearl) and removes the ender pearl from view 
 function enderCollide() {
     if(a > endx-60 && a< endx+60 && b > endy - 90 && b< endy+90) {
         endercol = true;
@@ -305,6 +313,7 @@ function enderCollide() {
     }
 }
 
+// combines the collision functions of all the items into one 
 function allCollides() {
     carrotCollide(); 
     beaconCollide();
@@ -340,6 +349,7 @@ function draw() {
   
     drawRect();
    
+    // makes the monsters move 
     x+=dx;
     y+=dy;
 
@@ -349,7 +359,7 @@ function draw() {
     cx+=dcx;
     cy+=dcy;
     
-
+    //makes sure monsters don't go off the screen
     if (x + dx + 60> 1050 || x + dx < 440) {
         dx = -dx;
     }
@@ -414,5 +424,3 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 let interval = setInterval(draw,10);
 
-var start = new Date(); 
-var elapsed = new Date() - start / 100; 
